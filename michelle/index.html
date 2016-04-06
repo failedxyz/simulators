@@ -22,6 +22,21 @@
 			button {
 				font-size: 0.9em;
 				padding: 10px;
+				border: 0;
+				outline: 0;
+				border-radius: 15px;
+			}
+			button.game {
+				padding: 10px 20px 10px 10px;
+			}
+			button:not(:disabled) {
+				background: #4CF;
+			}
+			button:not(:disabled):hover {
+				background: #6DF;
+			}
+			button:not(:disabled):active {
+				background: #2AF;
 			}
 		</style>
 	</head>
@@ -32,9 +47,9 @@
 			<p id="status"></p>
 			<p>Sleep time: <span id="totalSleep"></span> hour(s).</p>
 			<p>HP: <span id="hp"></span></p>
-			<p><button id="option1"><span class="fa-stack fa-lg"><i class="fa fa-facebook-official fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Go on messenger.</button></p>
-			<p><button id="option2" disabled><span class="fa-stack fa-lg"><i class="fa fa-pencil fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Do homework.</button></p>
-			<p><button id="option3" disabled><span class="fa-stack fa-lg"><i class="fa fa-moon-o fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Go to sleep.</button></p>
+			<p><button id="option1" class="game"><span class="fa-stack fa-lg"><i class="fa fa-facebook-official fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Go on messenger.</button></p>
+			<p><button id="option2" class="game" disabled><span class="fa-stack fa-lg"><i class="fa fa-pencil fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Do homework.</button></p>
+			<p><button id="option3" class="game" disabled><span class="fa-stack fa-lg"><i class="fa fa-moon-o fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Go to sleep.</button></p>
 		</center>
 		<center id="over" style="display:none">
 			<h1 style="color:red">Game over</h1>
