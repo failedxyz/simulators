@@ -75,7 +75,8 @@
 					options = [asleep == false, asleep == false && onMessenger == false, asleep == false];
 				}
 				if (time == 8 && asleep === true) {
-					sleep += time - sleepStart;
+					var diff = time - sleepStart;
+					sleep += (diff > 4) ? 4 : diff;
 					asleep = false;
 				} else if (time == 8 && asleep !== true && lostHp === false) {
 					lostHp = true;
