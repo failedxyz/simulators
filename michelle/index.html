@@ -19,6 +19,10 @@
 			html, body {
 				background: #F0F0F0;
 			}
+			button {
+				font-size: 0.9em;
+				padding: 10px;
+			}
 		</style>
 	</head>
 	<body>
@@ -28,14 +32,17 @@
 			<p id="status"></p>
 			<p>Sleep time: <span id="totalSleep"></span> hour(s).</p>
 			<p>HP: <span id="hp"></span></p>
-			<p><button id="option1"><i class="fa fa-facebook-official"></i> Go on messenger.</button></p>
-			<p><button id="option2" disabled><i class="fa fa-pencil"></i> Do homework.</button></p>
-			<p><button id="option3" disabled><i class="fa fa-moon-o"></i> Go to sleep.</button></p>
+			<p><button id="option1"><span class="fa-stack fa-lg"><i class="fa fa-facebook-official fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Go on messenger.</button></p>
+			<p><button id="option2" disabled><span class="fa-stack fa-lg"><i class="fa fa-pencil fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Do homework.</button></p>
+			<p><button id="option3" disabled><span class="fa-stack fa-lg"><i class="fa fa-moon-o fa-stack-1x" style="color:#008"></i><i class"fa fa-ban fa-stack-2x" style="color:rgba(0,0,0,0)"></i></span> Go to sleep.</button></p>
 		</center>
 		<center id="over" style="display:none">
 			<h1 style="color:red">Game over</h1>
 			<p>Final score: <span id="finalScore"></span> hour(s).</p>
 			<p><button onclick="javascript:newgame();">New Game</button></p>
+		</center>
+		<center>
+			<i style="display:block;width:250px">pls go to sleep. sincerely mikez and the rest of the chat that gets mad when rs is mentioned.</i>
 		</center>
 		<script type="text/javascript">
 			var status = "At home.";
@@ -46,25 +53,26 @@
 			var sleepStart = 0;
 			var time;
 			var lostHp = false;
+			var onMessenger = false;
 			var refresh = function() {
 				time = (~~(Date.now() / 2000)) % 24;
-				var timeString = "<i class='fa fa-" + (time >= 7 && time <= 17 ? "sun" : "moon") + "-o'></i> " + ((time % 12 == 0) ? 12 : (time % 12)) + ":00" + (time < 12 ? "am" : "pm");
+				var timeString = "<i class='fa fa-" + (time >= 7 && time <= 17 ? "sun-o' style='color:#CC0" : "moon-o' style='color:#008") + "'></i> " + ((time % 12 == 0) ? 12 : (time % 12)) + ":00" + (time < 12 ? "am" : "pm");
 				$("#time").html(timeString);
 				if (time >= 8 && time <= 15) {
 					status = "At school.";
 					options = [asleep == false, false, false];
 				} else if (time >= 16 && time <= 18) {
 					status = "In ILC.";
-					options = [asleep == false, true, false];
+					options = [asleep == false, asleep == false && onMessenger == false, false];
 				} else if (time >= 19 || time <= 1) {
 					status = "At home.";
 					options = [asleep == false, false, false];
 				} else if (time >= 2 && time <= 3) {
 					status = "At home.";
-					options = [asleep == false, asleep == false, false];
+					options = [asleep == false, asleep == false && onMessenger == false, false];
 				} else if (time >= 4 && time <= 7) {
 					status = "At home.";
-					options = [asleep == false, asleep == false, asleep == false];
+					options = [asleep == false, asleep == false && onMessenger == false, asleep == false];
 				}
 				if (time == 8 && asleep === true) {
 					sleep += time - sleepStart;
@@ -104,10 +112,21 @@
 				hp = 100;
 				asleep = false;
 				sleepStart = 0;
+				lostHp = false;
+				onMessenger = false;
 				$("#over").hide();
 				$("#game").show();
 				requestAnimationFrame(refresh);
 			};
+			$("#option1").click(function() {
+				if (onMessenger) {
+					onMessenger = false;
+					$("#option1").html("<span class='fa-stack fa-lg'><i class='fa fa-facebook-official fa-stack-1x' style='color:#008'></i><i class='fa fa-ban fa-stack-2x' style='color:rgba(0,0,0,0)'></i></span> Go on messenger.");
+				} else {
+					onMessenger = true;
+					$("#option1").html("<span class='fa-stack fa-lg'><i class='fa fa-facebook-official fa-stack-1x' style='color:#008'></i><i class='fa fa-ban fa-stack-2x' style='color:#800'></i></span> Get off messenger.");
+				}
+			});
 			$("#option3").click(function() {
 				if (time >= 4 && time <= 7) {
 					asleep = true;
