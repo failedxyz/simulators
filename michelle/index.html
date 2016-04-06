@@ -68,6 +68,7 @@
 			var sleepStart = -1;
 			var time;
 			var lostHp = false;
+			var slept = false;
 			var onMessenger = false;
 			var refresh = function() {
 				time = (~~(Date.now() / 2000)) % 24;
@@ -89,16 +90,18 @@
 					status = "At home.";
 					options = [asleep == false, asleep == false && onMessenger == false, asleep == false];
 				}
+				console.log(time, asleep, lostHp);
 				if (time == 8 && asleep === true) {
 					var diff = time - sleepStart;
 					sleep += (diff > 4) ? 4 : diff;
 					asleep = false;
 					sleepStart = -1;
-				} else if (time == 8 && asleep !== true && lostHp === false) {
+				} else if (time == 8 && asleep !== true && lostHp === false && slept === false) {
 					lostHp = true;
 					hp -= 10;
 				} else if (time == 9) {
 					lostHp = false;
+					slept = false;
 				}
 				if (asleep === true) {
 					status += " Asleep.";
@@ -108,7 +111,7 @@
 					else $("#option" + (i+1)).removeAttr("disabled");
 				}
 				var hpbars = Array((hp/10)+1).join("&#9608;");
-				$("#hp").html("<span style='color:" + (hp>=50 ? "green":"red") + "'>" + hpbars + "</span>");
+				$("#hp").html("<span style='color:" + (hp>=50 ? "green":"red") + "'>" + hpbars + "</span> (" + hp + "%)");
 				$("#status").html(status);
 				$("#totalSleep").html(sleep);
 				if (hp > 0) {
@@ -127,6 +130,7 @@
 				asleep = false;
 				sleepStart = -1;
 				lostHp = false;
+				slept = false;
 				onMessenger = false;
 				$("#over").hide();
 				$("#game").show();
@@ -144,6 +148,7 @@
 			$("#option3").click(function() {
 				if (time >= 4 && time <= 7) {
 					asleep = true;
+					slept = true;
 					sleepStart = time;
 				}
 			});
