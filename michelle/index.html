@@ -1,0 +1,112 @@
+<html>
+	<head>
+		<title>Michelle Simulator</title>
+		<script src="jquery.min.js"></script>
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<style type="text/css">
+			@font-face {
+				font-family: "Proxima Nova";
+				src: url("fonts/ProximaNova.woff2");
+			}
+			@font-face {
+				font-family: "Proxima Nova";
+				src: url("fonts/ProximaNovaBold.woff2");
+				font-weight: bold;
+			}
+			* {
+				font-family: "Proxima Nova";
+			}
+			html, body {
+				background: #F0F0F0;
+			}
+		</style>
+	</head>
+	<body>
+		<center id="game">
+			<h1>Michelle Simulator</h1>
+			<h2>Time: <span id="time"></span></h2>
+			<p id="status"></p>
+			<p>Sleep time: <span id="totalSleep"></span> hour(s).</p>
+			<p>HP: <span id="hp"></span></p>
+			<p><button id="option1"><i class="fa fa-facebook-official"></i> Go on messenger.</button></p>
+			<p><button id="option2" disabled><i class="fa fa-pencil"></i> Do homework.</button></p>
+			<p><button id="option3" disabled><i class="fa fa-moon-o"></i> Go to sleep.</button></p>
+		</center>
+		<center id="over" style="display:none">
+			<h1 style="color:red">Game over</h1>
+			<p>Final score: <span id="finalScore"></span></p>
+			<p><button onclick="javascript:newgame();">New Game</button></p>
+		</center>
+		<script type="text/javascript">
+			var status = "At home.";
+			var options = [true, false, false];
+			var sleep = 0;
+			var hp = 1;
+			var asleep = false;
+			var sleepStart = 0;
+			var time;
+			var refresh = function() {
+				time = (~~(Date.now() / 2000)) % 24;
+				var timeString = "<i class='fa fa-" + (time >= 7 && time <= 17 ? "sun" : "moon") + "-o'></i> " + ((time % 12 == 0) ? 12 : (time % 12)) + ":00" + (time < 12 ? "am" : "pm");
+				$("#time").html(timeString);
+				if (time >= 8 && time <= 15) {
+					status = "At school.";
+					options = [asleep == false, false, false];
+				} else if (time >= 16 && time <= 18) {
+					status = "In ILC.";
+					options = [asleep == false, true, false];
+				} else if (time >= 19 || time <= 1) {
+					status = "At home.";
+					options = [asleep == false, false, false];
+				} else if (time >= 2 && time <= 3) {
+					status = "At home.";
+					options = [asleep == false, asleep == false, false];
+				} else if (time >= 4 && time <= 7) {
+					status = "At home.";
+					options = [asleep == false, asleep == false, asleep == false];
+				}
+				if (time == 8 && asleep === true) {
+					sleep += time - sleepStart;
+					asleep = false;
+				} else if (time == 8 && asleep !== true) {
+					hp -= 0.2;
+				}
+				if (asleep === true) {
+					status += " Asleep.";
+				}
+				for(var i=0; i<options.length; i++) {
+					if (options[i] !== true) $("#option" + (i+1)).attr("disabled", "disabled");
+					else $("#option" + (i+1)).removeAttr("disabled");
+				}
+				$("#hp").html(hp * 100 + "%");
+				$("#status").html(status);
+				$("#totalSleep").html(sleep);
+				if (hp > 0) {
+					requestAnimationFrame(refresh);
+				} else {
+					$("#game").hide();
+					$("#over").show();
+				}
+			};
+			var newgame = function() {
+				status = "At home.";
+				options = [true, false, false];
+				sleep = 0;
+				hp = 1;
+				asleep = false;
+				sleepStart = 0;
+				$("#over").hide();
+				$("#game").show();
+				requestAnimationFrame(refresh);
+			};
+			$("#option3").click(function() {
+				if (time >= 4 && time <= 7) {
+					asleep = true;
+					sleepStart = time;
+					console.log("HI");
+				}
+			});
+			requestAnimationFrame(refresh);
+		</script>
+	</body>
+</html>
