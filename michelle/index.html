@@ -50,7 +50,7 @@
 			var sleep = 0;
 			var hp = 100;
 			var asleep = false;
-			var sleepStart = 0;
+			var sleepStart = -1;
 			var time;
 			var lostHp = false;
 			var onMessenger = false;
@@ -78,6 +78,7 @@
 					var diff = time - sleepStart;
 					sleep += (diff > 4) ? 4 : diff;
 					asleep = false;
+					sleepStart = -1;
 				} else if (time == 8 && asleep !== true && lostHp === false) {
 					lostHp = true;
 					hp -= 10;
@@ -91,10 +92,7 @@
 					if (options[i] !== true) $("#option" + (i+1)).attr("disabled", "disabled");
 					else $("#option" + (i+1)).removeAttr("disabled");
 				}
-				var hpbars = "";
-				for(var i=0; i<hp; i+=10) {
-					hpbars += "&#9608;";
-				}
+				var hpbars = Array((hp/10)+1).join("&#9608;");
 				$("#hp").html("<span style='color:" + (hp>=50 ? "green":"red") + "'>" + hpbars + "</span>");
 				$("#status").html(status);
 				$("#totalSleep").html(sleep);
@@ -112,7 +110,7 @@
 				sleep = 0;
 				hp = 100;
 				asleep = false;
-				sleepStart = 0;
+				sleepStart = -1;
 				lostHp = false;
 				onMessenger = false;
 				$("#over").hide();
@@ -132,7 +130,6 @@
 				if (time >= 4 && time <= 7) {
 					asleep = true;
 					sleepStart = time;
-					console.log("HI");
 				}
 			});
 			requestAnimationFrame(refresh);
